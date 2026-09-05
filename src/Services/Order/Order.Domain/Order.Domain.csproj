@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- Intentionally has ZERO package/project references. The domain layer in
+       Clean Architecture must not depend on EF Core, ASP.NET Core, or any
+       other framework/infrastructure concern - it is pure business logic. -->
+
+</Project>
