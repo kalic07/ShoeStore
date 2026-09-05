@@ -21,5 +21,39 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Run unit tests
+      run: dotnet test --no-build --configuration Release --verbosity normal
+
+    # Optional: Publish and upload the artifact so the deployment job can use it
+    - name: Publish application
+      run: dotnet publish --no-build --configuration Release --output ./publish
+
+    - name: Upload artifact for deployment
+      uses: actions/upload-artifact@v4
+      with:
+        name: dotnet-app-package
+        path: ./publish
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-test # Ensures deployment ONLY runs if build and tests pass
+    if: github.event_name == 'push' # Only deploy on actual merges/pushes to main, not PRs
+    
+    environment:
+      name: 'Production' # Connects to a GitHub environment if you have one configured
+
+    steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v4
+      with:
+        name: dotnet-app-package
+        path: ./publish
+
+    # --- SWAP THIS STEP OUT BASED ON YOUR HOSTING PROVIDER ---
+    # Example for Azure Web Apps:
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: 'your-app-name-on-azure'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ./publish        
