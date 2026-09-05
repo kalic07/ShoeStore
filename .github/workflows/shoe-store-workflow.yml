@@ -21,14 +21,6 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-
-    # Optional: Publish and upload the artifact so the deployment job can use it
-    - name: Publish application
-      run: dotnet publish --no-build --configuration Release --output ./publish
-
-    - name: Upload artifact for deployment
-      uses: actions/upload-artifact@v4
-      with:
-        name: dotnet-app-package
-        path: ./publish
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
     
