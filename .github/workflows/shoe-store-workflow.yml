@@ -53,14 +53,14 @@ jobs:
       uses: github/codeql-action/analyze@v3
 
     - name: Run Trivy Vulnerability Scanner
-        uses: aquasecurity/trivy-action@master
-        with:
+      uses: aquasecurity/trivy-action@master
+      with:
           scan-type: 'fs' # Scans the file system/dependencies
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'HIGH,CRITICAL'
 
-  - name: Upload Trivy Scan Results
-        uses: github/codeql-action/upload-sarif@v3
-        with:
+    - name: Upload Trivy Scan Results
+      uses: github/codeql-action/upload-sarif@v3
+      with:
           sarif_file: 'trivy-results.sarif'
