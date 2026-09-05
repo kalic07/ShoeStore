@@ -5,6 +5,8 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  schedule:
+    - cron: '0 0 * * 1'  
 
 jobs:
   build:
@@ -36,13 +38,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # 1. Initialize CodeQL targeting C#
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
-        languages: 'javascript' # Change to your project's language (e.g., python, go, java)
+        languages: 'csharp'
 
+    # 2. Build the C# application so CodeQL can analyze it
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
 
+    # 3. Perform the analysis
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
